@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>상품 뽑기 이벤트</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #74ebd5, #9face6);
+        text-align: center;
+        padding-top: 80px;
+    }
+
+    h1 {
+        font-size: 40px;
+        color: #fff;
+    }
+
+    #slot {
+        margin: 40px auto;
+        width: 300px;
+        height: 80px;
+        background: white;
+        border-radius: 10px;
+        font-size: 32px;
+        line-height: 80px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    button {
+        font-size: 22px;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        background: #ff7675;
+        color: white;
+    }
+
+    button:disabled {
+        background: #aaa;
+    }
+</style>
+</head>
+<body>
+
+<h1>🎁 상품 뽑기 이벤트</h1>
+
+<div id="slot">READY</div>
+
+<button id="drawBtn" onclick="startDraw()">뽑기 시작</button>
+
+<script>
+    const products = [
+        { name: "1등", weight: 40 },
+        { name: "2등", weight: 30 },
+        { name: "3등", weight: 20 },
+        { name: "4등", weight: 8 },
+        { name: "꽝", weight: 2 }
+    ];
+
+    let interval;
+
+    function pickProduct() {
+        const total = products.reduce((sum, p) => sum + p.weight, 0);
+        let r = Math.random() * total;
+
+        for (let p of products) {
+            if (r < p.weight) return p.name;
+            r -= p.weight;
+        }
+    }
+
+    function startDraw() {
+        const slot = document.getElementById("slot");
+        const button = document.getElementById("drawBtn");
+        button.disabled = true;
+
+        interval = setInterval(() => {
+            slot.innerText = products[Math.floor(Math.random() * products.length)].name;
+        }, 100);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            slot.innerText = pickProduct();
+            button.disabled = false;
+        }, 2500);
+    }
+</script>
+
+</body>
+</html>
